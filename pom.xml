@@ -24,12 +24,12 @@
     <parent>
         <groupId>io.airlift</groupId>
         <artifactId>airbase</artifactId>
-        <version>68</version>
+        <version>93</version>
     </parent>
 
     <artifactId>airline</artifactId>
     <packaging>jar</packaging>
-    <version>0.9-SNAPSHOT</version>
+    <version>0.10-SNAPSHOT</version>
 
     <name>airline</name>
     <description>Java annotation-based framework for parsing Git like command line structures</description>
@@ -69,6 +69,12 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

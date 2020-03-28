@@ -22,9 +22,12 @@ import java.util.Map;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.collect.Streams.stream;
+import static java.util.Objects.requireNonNull;
 
-public class MetadataLoader
+public final class MetadataLoader
 {
+    private MetadataLoader() {}
+
     public static GlobalMetadata loadGlobal(String name,
             String description,
             CommandMetadata defaultCommand,
@@ -69,6 +72,7 @@ public class MetadataLoader
 
     public static CommandMetadata loadCommand(Class<?> commandType)
     {
+        requireNonNull(commandType, "commandType is null");
         Command command = null;
         for (Class<?> cls = commandType; command == null && !Object.class.equals(cls); cls = cls.getSuperclass()) {
             command = cls.getAnnotation(Command.class);

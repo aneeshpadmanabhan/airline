@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.ImmutableList.toImmutableList;
@@ -86,7 +87,9 @@ public class Cli<C>
                 .map(group -> loadCommandGroup(
                         group.name,
                         group.description,
-                        loadCommand(group.defaultCommand),
+                        Optional.ofNullable(group.defaultCommand)
+                                .map(MetadataLoader::loadCommand)
+                                .orElse(null),
                         loadCommands(group.commands)))
                 .collect(toImmutableList());
 
@@ -218,7 +221,6 @@ public class Cli<C>
         private Class<? extends C> defaultCommand;
         private final List<Class<? extends C>> defaultCommandGroupCommands = new ArrayList<>();
         protected final Map<String, GroupBuilder<C>> groups = new HashMap<>();
-        protected CommandFactory<C> commandFactory;
 
         public CliBuilder(String name)
         {
@@ -232,13 +234,6 @@ public class Cli<C>
             requireNonNull(description, "description is null");
             checkArgument(!description.isEmpty(), "description is empty");
             this.description = description;
-            return this;
-        }
-
-        public CliBuilder<C> withCommandFactory(CommandFactory<C> commandFactory)
-        {
-            requireNonNull(commandFactory, "commandFactory is null");
-            this.commandFactory = commandFactory;
             return this;
         }
 
@@ -305,8 +300,8 @@ public class Cli<C>
     public static class GroupBuilder<C>
     {
         private final String name;
-        private String description = null;
-        private Class<? extends C> defaultCommand = null;
+        private String description;
+        private Class<? extends C> defaultCommand;
 
         private final List<Class<? extends C>> commands = new ArrayList<>();
 
